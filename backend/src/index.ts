@@ -64,10 +64,12 @@ app.post("/register", (req: Request, res: Response) => {
     let username = "";
     let password = "";
     let email = "";
+    let name = "";
     if (req.body) {
         username = req.body.username;
         password = req.body.password;
         email = req.body.email;
+        name = req.body.name;
     }
 
     register(username, password, email).then(result => {
