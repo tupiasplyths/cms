@@ -1,12 +1,13 @@
 import './App.css';
-import { useNavigate } from 'react-router-dom';
-import Signup from './pages/signup';
 
 function App() {
 	return (
-		<div className="App">
-			<Signup />
-		</div>
+		<>
+			<h1>App</h1>
+			<div>
+				<a href='/login'>Login</a> here
+			</div>
+		</>
 	);
 }
 

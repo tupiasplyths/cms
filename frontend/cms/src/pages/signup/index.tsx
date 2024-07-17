@@ -8,8 +8,12 @@ const Signup = () => {
     const name = useRef("");
 
 	function comparePassword() {
+		if (password.current === '' || repassword.current === '') {
+			return;
+		}
+
 		if (password.current !== repassword.current) {
-			
+			console.log("Passwords do not match");
 		}
 	}
     function submit(e: any) {
@@ -31,6 +35,7 @@ const Signup = () => {
 				console.log(data);
             });
 	}
+	// TODO: add small error message
 	return (
 	<div className={styles.container_signup}>
 		<div className={styles.bg_col} >
@@ -56,12 +61,12 @@ const Signup = () => {
 				</div>
 				<div>
 					<label className={styles.form_label}>Password</label>
-					<input type="password" className={styles.form_input} placeholder="**********" onChange={(e) => password.current = e.target.value}/>
+					<input type="password" className={styles.form_input} onBlur={comparePassword} placeholder="**********" onChange={(e) => password.current = e.target.value}/>
 					<div className={styles.focus_line}></div>
 				</div>
 				<div>
 					<label className={styles.form_label}>Repeat Password</label>
-					<input type="password" className={styles.form_input} placeholder="**********" onChange={(e) => repassword.current = e.target.value}/>
+					<input type="password" className={styles.form_input} onBlur={comparePassword} placeholder="**********" onChange={(e) => repassword.current = e.target.value}/>
 					<div className={styles.focus_line}></div>
 				</div>
 				<div>
