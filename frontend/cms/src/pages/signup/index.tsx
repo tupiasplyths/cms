@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import styles from "./signup.module.css";
 const Signup = () => {
     const username = useRef("");
@@ -43,7 +43,7 @@ const Signup = () => {
 		</div>
 		<div className={styles.form_col}>
 			<form onSubmit={(e) => submit(e)}>
-				<h1 style={{marginTop: "50px", marginBottom: "50px", fontSize: "40px"}}>Sign Up</h1>
+				<h1 style={{marginTop: "50px", marginBottom: "50px", fontSize: "46px"}}>Sign Up</h1>
 				<div>
 					<label className={styles.form_label}>Full Name</label>
 					<input type="text" className={styles.form_input} placeholder="Full Name" onChange={(e) => name.current = e.target.value}/>

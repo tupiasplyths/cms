@@ -20,8 +20,8 @@ export default function ErrorPage() {
 	return (
 		<div className={styles.bodyClass}>
 			<div id={styles.error_page}>
-				<h1>Oops!</h1>
-				<p>Sorry, an unexpected error has occurred.</p>
+				<h1 className={styles.oops}>Oops!</h1>
+				<p className={styles.notif}>Sorry, an unexpected error has occurred.</p>
 				<p>
 					<i>{errorMessage}</i>	
 				</p>
