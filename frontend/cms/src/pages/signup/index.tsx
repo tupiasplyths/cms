@@ -1,21 +1,26 @@
 import { useRef, useState } from "react";
 import styles from "./signup.module.css";
+const backend_url = process.env.REACT_APP_BACKEND_URL || "http://localhost:5050";
 const Signup = () => {
-    const username = useRef("");
+	const username = useRef("");
     const password = useRef("");
 	const repassword = useRef("");
     const email = useRef("");
     const name = useRef("");
+	let submittable = true;
 	const [submitting, setSubmitting] = useState(false);
 
 	function comparePassword() {
 		if (password.current === '' || repassword.current === '') {
 			return;
 		}
-
 		if (password.current !== repassword.current) {
+			submittable = false;
 			console.log("Passwords do not match");
+			return;
 		}
+
+		submittable = true;
 	}
     function submit(e: any) {
         e.preventDefault();
@@ -24,7 +29,10 @@ const Signup = () => {
 		// 	setSubmitting(false);
 		// }, 3000);
 
-        fetch("/register", {
+		if (!submittable) {
+			return;
+		}
+        fetch(backend_url + "/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
