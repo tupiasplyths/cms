@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import styles from './login.module.css';
-const backend_url = process.env.REACT_APP_BACKEND_URL || "http://localhost:3654";
+const backend_url = process.env.REACT_APP_BACKEND_URL || "http://localhost:5050";
 //subject to change layout
 export default function Login() {
 	const username = useRef("");
@@ -8,7 +8,7 @@ export default function Login() {
 
 	function submit(e: any) {
 		e.preventDefault();
-		fetch(backend_url + "/api/login", {
+		fetch(backend_url + "/login", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
