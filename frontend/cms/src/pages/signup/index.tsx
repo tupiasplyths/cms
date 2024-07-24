@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import styles from "./signup.module.css";
 const Signup = () => {
     const username = useRef("");
@@ -6,6 +6,7 @@ const Signup = () => {
 	const repassword = useRef("");
     const email = useRef("");
     const name = useRef("");
+	const [submitting, setSubmitting] = useState(false);
 
 	function comparePassword() {
 		if (password.current === '' || repassword.current === '') {
@@ -18,8 +19,12 @@ const Signup = () => {
 	}
     function submit(e: any) {
         e.preventDefault();
+		setSubmitting(true);
+		// setTimeout(() => {
+		// 	setSubmitting(false);
+		// }, 3000);
 
-        fetch("/api/register", {
+        fetch("/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -32,6 +37,7 @@ const Signup = () => {
             }),
         }).then((res) => res.json())
             .then((data) => {
+				setSubmitting(false);
 				console.log(data);
             });
 	}
@@ -43,7 +49,7 @@ const Signup = () => {
 		</div>
 		<div className={styles.form_col}>
 			<form onSubmit={(e) => submit(e)}>
-				<h1 style={{marginTop: "50px", marginBottom: "50px", fontSize: "46px"}}>Sign Up</h1>
+				<h1 style={{marginTop: "80px", marginBottom: "100px", fontSize: "52px"}}>Sign Up</h1>
 				<div>
 					<label className={styles.form_label}>Full Name</label>
 					<input type="text" className={styles.form_input} placeholder="Full Name" onChange={(e) => name.current = e.target.value}/>
@@ -69,8 +75,10 @@ const Signup = () => {
 					<input type="password" className={styles.form_input} onBlur={comparePassword} placeholder="**********" onChange={(e) => repassword.current = e.target.value}/>
 					<div className={styles.focus_line}></div>
 				</div>
-				<div>
-					<input className={styles.form_button} type="submit" value="Sign Up"/>
+				<div className={styles.bottomdiv}>
+					{submitting? <span className={styles.loader}></span> : 
+						<input className={styles.form_button} type="submit" value="Sign Up"/>
+					}
 					<a href="/login">Sign in  →</a>
 				</div>
 			</form>
