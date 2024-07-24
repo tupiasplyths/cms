@@ -14,7 +14,7 @@ const conn = postgres({
     password: process.env.DB_PASSWORD
 })
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5050;
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -25,18 +25,27 @@ async function login(username: string, password: string) {
     return checkPassword(password, hash);
 }
 
-async function register(username: string, password: string, email: string) {
+async function register(username: string, password: string, email: string, name: string) {
+	try {
+		let result = await conn `SELECT username FROM users WHERE username = ${username}`;
+		if (result.length > 0) {
+			return {success: false, message: "username taken"};
+		}
+	} catch (e) {
+		console.log(e);
+	}
+
     let hash = hashPassword(password);
     try {
-        let result = await conn`INSERT INTO users (username, password, email) VALUES (${username}, ${hash}, ${email})`;
+        let result = await conn`INSERT INTO users (username, password, email, name) VALUES (${username}, ${hash}, ${email}, ${name})`;
         if (result) {
-            return "success";
+            return {success: true, message: "user created"};
         }
     } catch (e) {
         console.log(e);
     }
     
-    return "fail";
+    return {success: false, message: "something went wrong"};
 }
 
 app.post("/login", (req: Request, res: Response) => {
@@ -48,6 +57,12 @@ app.post("/login", (req: Request, res: Response) => {
     }
     console.log(req.body);
     console.log(username + " " + password);
+
+	if (username === "" || password === "") {
+		res.setHeader('Content-Type', 'application/json');
+		res.send({ success: false, message: "One or more fields are empty" });
+		return;
+	}
 
     login(username, password).then(result => {
         if (result) {
@@ -72,13 +87,19 @@ app.post("/register", (req: Request, res: Response) => {
         name = req.body.name;
     }
 
-    register(username, password, email).then(result => {
-        if (result === "success") {
+	if (name === "" || email === "" || username === "" || password === "") {
+		res.setHeader('Content-Type', 'application/json');
+		res.send({ success: false, message: "One or more fields are empty" });
+		return;
+	}
+
+    register(username, password, email, name).then(result => {
+        if (result.success) {
             res.setHeader('Content-Type', 'application/json');
-            res.send({ success: true });
+            res.send({ success: true, message: result.message });
         } else {
             res.setHeader('Content-Type', 'application/json');
-            res.send({ success: false });
+            res.send({ success: false, message: result.message });
         }
     })
 })
